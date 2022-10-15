@@ -1,13 +1,20 @@
+import './style.css'
 import * as THREE from 'three'
 import gsap from 'gsap'
 
+const sizes = {
+  width: window.innerWidth,
+  height: window.innerHeight,
+}
+
 const renderer = new THREE.WebGLRenderer()
-renderer.setSize(window.innerWidth, window.innerHeight)
+renderer.setSize(sizes.width, sizes.height)
 document.body.appendChild(renderer.domElement)
+renderer.domElement.setAttribute('class', 'webgl')
 
 const camera = new THREE.PerspectiveCamera(
   45,
-  window.innerWidth / window.innerHeight,
+  sizes.width / sizes.height,
   1,
   500
 )
@@ -25,6 +32,16 @@ gsap.to(mesh.rotation, {
   duration: 3,
   yoyo: true,
   repeat: -1,
+})
+
+window.addEventListener('resize', () => {
+  sizes.width = window.innerWidth
+  sizes.height = window.innerHeight
+
+  camera.aspect = sizes.width / sizes.height
+  camera.updateProjectionMatrix()
+
+  renderer.setSize(sizes.width, sizes.height)
 })
 
 function animate() {
